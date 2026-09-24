@@ -1,0 +1,33 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a material-feed robot performs lumber loading
+;; and cut-piece removal near woodworking machinery (ISCO 7523). Its physical
+;; work: an arm lifts boards onto the machine's infeed table, and a cart
+;; brings lumber from the rack to the machine.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-7523"
+ :cases
+ [{:id :board-to-infeed-table
+   :kind :manipulator
+   :procedure "arm lifts a sawn board from the lumber cart onto the planer/saw infeed table"
+   :params {:l1-m 0.80 :l2-m 0.70 :m1-kg 12.0 :m2-kg 8.0
+            :from [0.90 0.10] :to [0.40 0.75] :duration-s 2.5 :steps 500}
+   :sweep {:param :payload-kg :values [5.0 10.0 15.0 20.0 30.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 450.0 :basis "estimate: continuous shoulder torque of a ~20 kg-payload industrial arm"}
+   :boundary {:lo 1.0 :hi 80.0}}
+  {:id :lumber-cart-to-machine
+   :kind :transport
+   :procedure "cart brings a bundle of lumber from the storage rack to the machine infeed"
+   :params {:mass-kg 120.0 :distance-m 25.0 :v-max-mps 0.8 :a-max-mps2 0.4
+            :brake-decel-mps2 1.0 :drive-force-n 300.0 :crr 0.02
+            :cog-height-m 0.30 :payload-cog-height-m 0.60 :support-half-length-m 0.50
+            :max-time-s 1200.0}
+   :sweep {:param :payload-kg :values [100.0 200.0 400.0 600.0 800.0]}
+   :quantity :cycle-time-s
+   :limit {:max 40.0 :basis "estimate: one feed leg must fit inside the machine's batch changeover so the machine is not starved"}
+   :boundary {:lo 50.0 :hi 1500.0}}]}
