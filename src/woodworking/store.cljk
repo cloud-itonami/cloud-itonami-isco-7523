@@ -1,7 +1,7 @@
 (ns woodworking.store
   "SSoT for the ISCO-08 7523 independent woodworking machine
   operations actor (itonami actor pattern, ADR-2607011000 /
-  CLAUDE.md Actors section; README's 'Robotics premise' — a
+  AGENTS.md Actors section; README's 'Robotics premise' — a
   material-feed robot performs lumber loading and cut-piece removal
   under this advisor/governor pair, which never dispatches hardware
   itself). Modeled on cloud-itonami-isco-4311's bookkeeping.store.
